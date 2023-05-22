@@ -1,0 +1,870 @@
+﻿<mah:MetroWindow x:Class="Report.SettingWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Report"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        Title="설정" Height="900" Width="1600" Icon="Logo_Icon.ico" TitleCharacterCasing="Normal">
+    <Window.Resources>
+        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource MahApps.Styles.TextBlock}">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style TargetType="mah:NumericUpDown">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource MahApps.Styles.TextBox}">
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1" Margin="5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:CallMethodAction TargetObject="{Binding}" MethodName="PassRangeListAddButton_Click"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <TextBlock Text="추가"/>
+                </Button>
+                <Button Grid.Column="2" Margin="5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:CallMethodAction TargetObject="{Binding}" MethodName="PassRangeListRemoveButton_Click"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <TextBlock Text="삭제"/>
+                </Button>
+                <Button Grid.Column="3" Margin="5">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:CallMethodAction TargetObject="{Binding}" MethodName="PassRangeListSaveButton_Click"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <TextBlock Text="저장"/>
+                </Button>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="4*"/>
+                </Grid.ColumnDefinitions>
+                <GroupBox Header="색상 그룹" mah:HeaderedControlHelper.HeaderFontSize="16" Margin="5">
+                    <DataGrid ItemsSource="{Binding PassRangeList}" SelectedItem="{Binding SelectedPassRange}" AutoGenerateColumns="False" GridLinesVisibility="All" CanUserAddRows="False">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="AddingNewItem">
+                                <i:CallMethodAction TargetObject="{Binding}" MethodName="PassRangeList_AddingNewItem"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="RowEditEnding">
+                                <i:CallMethodAction TargetObject="{Binding}" MethodName="PassRangeList_RowEditEnding"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="CellEditEnding">
+                                <i:CallMethodAction TargetObject="{Binding}" MethodName="PassRangeList_CellEditEnding"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="Loaded">
+                                <i:CallMethodAction TargetObject="{Binding}" MethodName="PassRangeList_Loaded"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="색상명" Binding="{Binding Color}" Width="1*" FontSize="16"/>
+                        </DataGrid.Columns>
+                        <DataGrid.CellStyle>
+                            <Style TargetType="DataGridCell" BasedOn="{StaticResource MahApps.Styles.DataGridCell}">
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            </Style>
+                        </DataGrid.CellStyle>
+                    </DataGrid>
+                </GroupBox>
+                <GroupBox Grid.Column="1" Header="합격범위 설정" mah:HeaderedControlHelper.HeaderFontSize="16" Margin="5">
+                    <TabControl Margin="5">
+                        <TabItem Header="FR 범위 지정">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2.3*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.ColumnSpan="2" IsChecked="{Binding FrontSymmetric}" Content="Symmetric" FontSize="16" Margin="5"/>
+                                <Grid Grid.Row="1" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="-15º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="2" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Margin="5" Minimum="0" Value="{Binding SelectedPassRange.Front_dE_Minus15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="2" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_Minus15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_Minus15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="4" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_Minus15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="4" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_Minus15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_Minus15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="6" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_Minus15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="6" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_Minus15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_Minus15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="8" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_Minus15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="8" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_Minus15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_Minus15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="15º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="2" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="2" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="4" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="4" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="6" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="6" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="8" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="8" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="25º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="2" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_25_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="2" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_25_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_25_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="4" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_25_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="4" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_25_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_25_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="6" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_25_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="6" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_25_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_25_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="8" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_25_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="8" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_25_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_25_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="45º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="2" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_45_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="2" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_45_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_45_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="4" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_45_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="4" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_45_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_45_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="6" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_45_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="6" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_45_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_45_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="8" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_45_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="8" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_45_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_45_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="75º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="2" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_75_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="2" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_75_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_75_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="4" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_75_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="4" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_75_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_75_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="6" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_75_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="6" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_75_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_75_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="8" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_75_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="8" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_75_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_75_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="110º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="2" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_110_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="2" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_110_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dE_110_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="4" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_110_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="4" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_110_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_dL_110_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="6" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_110_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="6" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_110_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_da_110_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="8" Margin="5" Visibility="{Binding FrontYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_110_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="8" Margin="5" Visibility="{Binding FrontNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_110_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Front_db_110_PassRangePlusValue}"/>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="RR 범위 지정">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2.3*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                </Grid.ColumnDefinitions>
+                                <CheckBox Grid.ColumnSpan="2" IsChecked="{Binding RearSymmetric}" Content="Symmetric" FontSize="16" Margin="5"/>
+                                <Grid Grid.Row="1" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="-15º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="2" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Margin="5" Minimum="0" Value="{Binding SelectedPassRange.Rear_dE_Minus15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="2" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_Minus15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_Minus15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="4" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_Minus15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="4" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_Minus15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_Minus15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="6" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_Minus15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="6" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_Minus15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_Minus15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="8" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_Minus15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="1" Grid.Column="8" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_Minus15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_Minus15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="15º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="2" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="2" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="4" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="4" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="6" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="6" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="8" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_15_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="2" Grid.Column="8" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_15_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_15_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="25º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="2" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_25_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="2" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_25_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_25_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="4" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_25_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="4" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_25_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_25_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="6" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_25_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="6" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_25_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_25_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="8" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_25_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="3" Grid.Column="8" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_25_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_25_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="45º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="2" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_45_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="2" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_45_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_45_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="4" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_45_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="4" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_45_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_45_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="6" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_45_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="6" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_45_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_45_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="8" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_45_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="4" Grid.Column="8" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_45_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_45_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="75º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="2" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_75_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="2" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_75_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_75_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="4" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_75_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="4" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_75_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_75_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="6" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_75_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="6" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_75_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_75_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="8" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_75_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="5" Grid.Column="8" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_75_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_75_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Margin="5" Background="SteelBlue">
+                                    <TextBlock Text="110º" FontSize="16" Margin="5" VerticalAlignment="Center"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="1" Margin="5">
+                                    <TextBlock Text="dE*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="2" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_110_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="2" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_110_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dE_110_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="3" Margin="5">
+                                    <TextBlock Text="dL*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="4" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_110_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="4" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_110_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_dL_110_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="5" Margin="5">
+                                    <TextBlock Text="da*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="6" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_110_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="6" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_110_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_da_110_PassRangePlusValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="7" Margin="5">
+                                    <TextBlock Text="db*" Margin="5" VerticalAlignment="Center" TextAlignment="Right"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="8" Margin="5" Visibility="{Binding RearYesSymmetric}">
+                                    <mah:NumericUpDown StringFormat="±{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_110_PassRangeValue}"/>
+                                </Grid>
+                                <Grid Grid.Row="6" Grid.Column="8" Margin="5" Visibility="{Binding RearNoSymmetric}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <mah:NumericUpDown StringFormat="­­­－{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_110_PassRangeMinusValue}"/>
+                                    <mah:NumericUpDown Grid.Column="1" StringFormat="＋{0}" Minimum="0" Margin="5" Value="{Binding SelectedPassRange.Rear_db_110_PassRangePlusValue}"/>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </GroupBox>
+            </Grid>
+        </Grid>
+    </Grid>
+</mah:MetroWindow>
